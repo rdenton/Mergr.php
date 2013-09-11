@@ -21,20 +21,20 @@ class mergr {
 		
 		if ( file_exists($directory . "/css") && is_dir($directory . "/css") ) {
 			//List CSS files to process.
-			$this->css_process = $this->scandirectory($directory . "/css");
+			$this->css_process = $this->scandirectory($directory . "/css", ".css");
 		}
 		
 		//Check if there is JS to process.
 		
 		if ( file_exists($directory . "/js") && is_dir($directory . "/js") ) {
 			//List JS files to process.
-			$this->js_process = $this->scandirectory($directory . "/js");
+			$this->js_process = $this->scandirectory($directory . "/js", ".js");
 		}
 
 		
 	}
 	
-	protected function scandirectory($directory=null) {
+	protected function scandirectory($directory=null,$file_extension=".css") {
 		
 		if (! $directory ) {
 			print("No directory specified in scandirectory(); function\n");
@@ -50,7 +50,7 @@ class mergr {
 				if ( file_exists($directory . "/" . $file) && !is_dir($directory . "/" . $file) ) {
 					//Valid file.
 					//Check for CSS extension.
-					if ( substr($file, -4) == ".css" && $file != "style.min.css") {
+					if ( substr($file, -strlen($file_extension)) == $file_extension && $file != "global.min." . $file_extension) {
 						$return_array[] = $directory . "/" . $file;
 					}
 				}
@@ -102,16 +102,16 @@ class mergr {
 			//This is where CSS should be minified if there is any.
 			
 			//Write the file.
-			$fh = @fopen($directory . "/css/style.min.css", "w");
+			$fh = @fopen($directory . "/css/global.min.css", "w");
 			if ( !$fh ) {
-				print("Error: Couldn't write style.min.css merged file.\n");
+				print("Error: Couldn't write global.min.css merged file.\n");
 				exit;
 			}
 			
 			fwrite($fh, $merge_buffer);
 			fclose($fh);
 			
-			print("Merged " . $merge_count . " files. Output has been saved to " . $directory . "/css/style.min.css\n");
+			print("Merged " . $merge_count . " files. Output has been saved to " . $directory . "/css/global.min.css\n");
 			
 			return true;
 			
