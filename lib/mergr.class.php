@@ -99,7 +99,8 @@ class mergr {
 				
 			}
 			
-			//This is where CSS should be minified if there is any.
+			//Execute filter plugins.
+			$merge_buffer = mergr_execute_plugins( "filter","css", $merge_buffer );
 			
 			//Write the file.
 			$fh = @fopen($directory . "/css/global.min.css", "w");
@@ -118,6 +119,12 @@ class mergr {
 		} else {
 			return false;
 		}
+		
+	}
+	
+	protected function plugin_execute($operation, $type) {
+		
+		global $mergr_plugins;
 		
 	}
 	
